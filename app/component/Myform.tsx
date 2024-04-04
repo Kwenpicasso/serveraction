@@ -15,6 +15,9 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { create } from "../actions/action"
+import prisma from "../db"
+import { useRef } from "react"
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -25,7 +28,10 @@ const formSchema = z.object({
   }),
 })
 
+
+
 export function ProfileForm() {
+
      // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -42,11 +48,16 @@ export function ProfileForm() {
     console.log(values)
   }
   // ...
-
+ const formRef = useRef<HTMLFormElement>(null)
   return (
    <div className="w-[50%] m-auto justify-center flex items-center  p-5 mt-[4%]">
      <Form {...form} >
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-[80%] mx-auto">
+      <form action={
+        async(formData: FormData) => {
+          await create(formData);
+          form.reset()
+        }
+      } ref={formRef}  className="space-y-8 w-[80%] mx-auto">
         <FormField
           control={form.control}
           name="username"
@@ -68,7 +79,7 @@ export function ProfileForm() {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input placeholder="Enter password" type="password" {...field} />
+                <Input placeholder="Enter password" type="text" {...field} />
               </FormControl>
              
               <FormMessage />
@@ -78,6 +89,9 @@ export function ProfileForm() {
         <Button type="submit" className="w-full">Submit</Button>
       </form>
     </Form>
+
+
+   
    </div>
   )
 }
