@@ -2,11 +2,13 @@
 
 import { revalidatePath } from "next/cache";
 import prisma from "../db";
+import { z } from "zod"
 
 // create a user
 export async function create(formData : FormData) {
     const user = formData.get('username') as string;
     const password = formData.get('password') as string;
+
 
     await prisma.user.create({
         data: {
@@ -35,3 +37,28 @@ export async function edit(formData : FormData) {
     
     revalidatePath ('/')
 }
+
+
+
+
+// const formSchema = z.object({
+//     username: z.string().min(8).email('gggfdd'),
+//     password: z.string().min(6).email('jff')
+//   })
+// const result = formSchema.safeParse({
+//     user: formData.get('username') ,
+//     password: formData.get('password') 
+// });
+// if (!result.success) {
+// // handle error then return
+// return{
+// type: 'error',
+// errors: result.error.flatten().fieldErrors,
+// message: 'Missing field'
+// }
+// } 
+// return {
+// type:'success',
+// message: 'User created successfully'
+
+// }

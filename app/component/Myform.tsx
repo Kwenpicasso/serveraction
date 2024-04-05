@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
-  FormDescription,
+
   FormField,
   FormItem,
   FormLabel,
@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/input"
 import { create } from "../actions/action"
 import prisma from "../db"
 import { useRef } from "react"
+import { useFormState } from "react-dom"
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -29,8 +30,8 @@ const formSchema = z.object({
 })
 
 
-
 export function ProfileForm() {
+ 
 
      // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -49,10 +50,14 @@ export function ProfileForm() {
   }
   // ...
  const formRef = useRef<HTMLFormElement>(null)
+ 
+
+
+
   return (
    <div className="w-[50%] m-auto justify-center flex items-center  p-5 mt-[4%]">
-     <Form {...form} >
-      <form action={
+     <Form {...form}  >
+      <form  action={
         async(formData: FormData) => {
           await create(formData);
           form.reset()
