@@ -16,18 +16,21 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { create } from "../actions/action"
-import prisma from "../db"
 import { useRef } from "react"
-import { useFormState } from "react-dom"
+
+
+
+
+
 
 const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
+  email: z.string().email({
+    message: "Invalid email format.",
   }),
-  password: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
+  password: z.string().min(7, {
+    message: "Password must be at least 7 characters.",
   }),
-})
+});
 
 
 export function ProfileForm() {
@@ -37,43 +40,30 @@ export function ProfileForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
+      email: "",
       password: '',
     },
   })
  
-  // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values)
-  }
-  // ...
- const formRef = useRef<HTMLFormElement>(null)
- 
 
 
-
+const formRef = useRef<HTMLFormElement>(null);
   return (
-   <div className="w-[50%] m-auto justify-center flex items-center  p-5 mt-[4%]">
+   <div className="md:w-[50%] w-full m-auto justify-center flex items-center  p-5 mt-[4%]">
      <Form {...form}  >
-      <form  action={
-        async(formData: FormData) => {
-          await create(formData);
-          form.reset()
-        }
-      } ref={formRef}  className="space-y-8 w-[80%] mx-auto">
+      <form action={create} ref={formRef} onSubmit={form.handleSubmit(()=> formRef.current?.submit())}  className="space-y-8 w-[80%] mx-auto">
         <FormField
           control={form.control}
-          name="username"
+          name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Username</FormLabel>
+              <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="username" type="text"  {...field} />
+                <Input placeholder="Email" type="email"  required {...field} />
               </FormControl>
               
-              <FormMessage />
+             <FormMessage/>
+            
             </FormItem>
           )}
         />
@@ -84,14 +74,17 @@ export function ProfileForm() {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input placeholder="Enter password" type="text" {...field} />
+                <Input placeholder="Enter password" required type="password" {...field} />
               </FormControl>
              
-              <FormMessage />
+              <FormMessage/>
+            
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full">Submit</Button>
+        <Button type="submit" className="w-full" disabled={!form.formState.isValid}>
+         Submit
+        </Button>
       </form>
     </Form>
 
