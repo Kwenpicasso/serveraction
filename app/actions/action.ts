@@ -24,7 +24,7 @@ export async function create( formData:FormData) {
  } catch (error) {
     console.log(error)
  }
-    revalidatePath ('/')
+    revalidatePath ('/better')
     return null
 
     
@@ -52,7 +52,7 @@ export async function edit(formData : FormData) {
   } catch (error) {
     console.log(error)
   }
-    revalidatePath ('/')
+    revalidatePath ('/better')
 }
 
 // delete user 
@@ -73,5 +73,5 @@ try {
     console.log(error)
 }
     
-    revalidatePath ('/')
+    revalidatePath ('/better')
 }
