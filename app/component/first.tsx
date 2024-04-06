@@ -3,12 +3,14 @@ import { edit, remove } from "../actions/action";
 import prisma from "../db";
 import { ProfileForm } from "./Myform";
 import Delete from "./Delete";
+import { unstable_noStore as noStore } from 'next/cache'
 
 
 
 
 
 async function getData() {
+  noStore();
   const data = await prisma.user.findMany({
       select: {
           username: true,
@@ -22,7 +24,7 @@ export default async function First() {
   const data = await getData();
   
   return (
-   <div className="w-full h-full flex justify-center items-center flex-col">
+   <div className="w-full h-full flex  justify-center items-center flex-col">
      <ProfileForm/>
      <div className=" w-full md:w-[50%] mx-auto h-[600px]">
   {data.map((item) => (
