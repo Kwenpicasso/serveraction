@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import prisma from "../db";
+import { toast } from "sonner";
 
 
 
@@ -18,7 +19,8 @@ export async function create( formData:FormData) {
             password: password
         }
     })
-   
+    
+
  } catch (error) {
     console.log(error)
  }
@@ -33,6 +35,7 @@ export async function edit(formData : FormData) {
     const user = formData.get('inputone') as string;
     const password = formData.get('password') as string;
 
+  try {
     await prisma.user.update({
         where: {
           id:id
@@ -41,8 +44,14 @@ export async function edit(formData : FormData) {
             username: user,
             password: password
         }
+        
     });
+   
+
     
+  } catch (error) {
+    console.log(error)
+  }
     revalidatePath ('/')
 }
 
@@ -51,12 +60,18 @@ export async function edit(formData : FormData) {
 export async function remove(formData : FormData) {
     const id = formData.get('inputid') as string;
    
+try {
 
     await prisma.user.delete({
         where: {
           id:id
         }
     });
+  
+
+} catch (error) {
+    console.log(error)
+}
     
     revalidatePath ('/')
 }
