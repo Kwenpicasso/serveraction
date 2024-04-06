@@ -22,7 +22,7 @@ export async function create( formData:FormData) {
     
 
  } catch (error) {
-    console.log(error)
+    "Failed to Create"
  }
     revalidatePath ('/better')
     return null
@@ -35,7 +35,6 @@ export async function edit(formData : FormData) {
     const user = formData.get('inputone') as string;
     const password = formData.get('password') as string;
 
-  try {
     await prisma.user.update({
         where: {
           id:id
@@ -46,12 +45,6 @@ export async function edit(formData : FormData) {
         }
         
     });
-   
-
-    
-  } catch (error) {
-    console.log(error)
-  }
     revalidatePath ('/better')
 }
 
@@ -59,19 +52,12 @@ export async function edit(formData : FormData) {
 
 export async function remove(formData : FormData) {
     const id = formData.get('inputid') as string;
-   
-try {
-
     await prisma.user.delete({
         where: {
           id:id
         }
     });
   
-
-} catch (error) {
-    console.log(error)
-}
     
     revalidatePath ('/better')
 }
